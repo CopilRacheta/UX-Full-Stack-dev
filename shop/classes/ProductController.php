@@ -12,7 +12,7 @@ class ProductController {
     public function create_product(array $product) 
     {
         
-        $sql = "INSERT INTO products(name, description, price, image)
+        $sql = "INSERT INTO Products(ProductName, Description, Price, Image)
         VALUES (:name, :description, :price, :image);";
         $this->db->runSQL($sql, $product);
         return $this->db->lastInsertId();
@@ -20,26 +20,26 @@ class ProductController {
 
     public function get_product_by_id(int $id)
     {
-        $sql = "SELECT * FROM products WHERE id = :id";
+        $sql = "SELECT * FROM Products WHERE product_id = :id";
         $args = ['id' => $id];
         return $this->db->runSQL($sql, $args)->fetch();
     }
 
     public function get_all_products()
     {
-        $sql = "SELECT * FROM products";
+        $sql = "SELECT * FROM Products";
         return $this->db->runSQL($sql)->fetchAll();
     }
 
     public function update_product(array $product)
     {
-        $sql = "UPDATE products SET name = :name, description = :description, price = :price, image = :image WHERE id = :id";
+        $sql = "UPDATE Products SET ProductName = :name, Description = :description, Price = :price, Image = :image WHERE product_id = :id";
         return $this->db->runSQL($sql, $product)->execute();
     }
 
     public function delete_product(int $id)
     {
-        $sql = "DELETE FROM products WHERE id = :id";
+        $sql = "DELETE FROM Products WHERE product_id = :id";
         $args = ['id' => $id];
         return $this->db->runSQL($sql, $args)->execute();
     }

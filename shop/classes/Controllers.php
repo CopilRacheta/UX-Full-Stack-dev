@@ -5,6 +5,7 @@ class Controllers {
     protected $db = null;
     protected $members = null;
     protected $products = null;
+    protected $reviews = null;
 
     public function __construct()
     {
@@ -12,7 +13,7 @@ class Controllers {
 
         $type ='mysql';
         $server = '127.0.0.1';
-        $db = 'shop';
+        $db = 'BroadleighGardens';
         $port = '3306';
         $charset = 'latin1';
 
@@ -46,5 +47,13 @@ class Controllers {
             $this->products = new ProductController($this->db);
         }
         return $this->products;
+    }
+
+    public function reviews()
+    {
+        if ($this->reviews === null) {
+            $this->reviews = new ReviewController($this->db);
+        }
+        return $this->reviews;
     }
 }

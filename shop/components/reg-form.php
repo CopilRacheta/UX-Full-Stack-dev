@@ -10,8 +10,9 @@
     $sname =  InputProcessor::processString($_POST['sname']);
     $email =  InputProcessor::processEmail($_POST['email']);
     $password =  InputProcessor::processPassword($_POST['password'], $_POST['password-v']);
+    $address = InputProcessor::processString($_POST['address']);
     
-    $valid = $fname['valid'] && $sname['valid'] && $email['valid'] && $password['valid'];
+    $valid = $fname['valid'] && $sname['valid'] && $address['valid'] && $email['valid'] && $password['valid'];
 
     $message = !$valid ? "Please fix the above errors:" : '';
 
@@ -20,6 +21,7 @@
 
       $args = ['firstname' => $fname['value'],
                'lastname' => $sname['value'],
+               'address' => $address['value'],
                'email' => $email['value'],
                'password' => password_hash($password['value'], PASSWORD_DEFAULT)];
 
@@ -53,6 +55,10 @@
                 <small class="text-danger"><?= htmlspecialchars($sname['error'] ?? '') ?></small>
               </div>
 
+              <div class="form-outline mb-4">
+                <input required type="text" id="address" name="address" class="form-control form-control-lg" placeholder="Address" value="<?= htmlspecialchars($address['value'] ?? '') ?>"/>
+                <small class="text-danger"><?= htmlspecialchars($address['error'] ?? '') ?></small>
+              </div>
 
               <div class="form-outline mb-4">
                 <input required type="email" id="email" name="email" class="form-control form-control-lg" placeholder="Email" value="<?= htmlspecialchars($email['value']?? '') ?>" />

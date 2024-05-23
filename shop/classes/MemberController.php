@@ -11,33 +11,33 @@ class MemberController {
 
     public function get_member_by_id(int $id)
     {
-        $sql = "SELECT * FROM users WHERE id = :id";
+        $sql = "SELECT * FROM Customers WHERE customer_id = :id";
         $args = ['id' => $id];
         return $this->db->runSQL($sql, $args)->fetch();
     }
 
     public function get_member_by_email(string $email)
     {
-        $sql = "SELECT * FROM users WHERE email = :email";
+        $sql = "SELECT * FROM Customers WHERE Email = :email";
         $args = ['email' => $email];
         return $this->db->runSQL($sql, $args)->fetch();
     }
 
     public function get_all_members()
     {
-        $sql = "SELECT * FROM users";
+        $sql = "SELECT * FROM Customers";
         return $this->db->runSQL($sql)->fetchAll();
     }
 
     public function update_member(array $member)
     {
-        $sql = "UPDATE users SET firstname = :firstname, lastname = :lastname, email = :email WHERE id = :id";
+        $sql = "UPDATE Customers SET Firstname = :firstname, Surname = :lastname, Email = :email WHERE customer_id = :id";
         return $this->db->runSQL($sql, $member)->execute();
     }
 
     public function delete_member(int $id)
     {
-        $sql = "DELETE FROM users WHERE id = :id";
+        $sql = "DELETE FROM Customers WHERE customer_id = :id";
         $args = ['id' => $id];
         return $this->db->runSQL($sql, $args)->execute();
     }
@@ -46,8 +46,8 @@ class MemberController {
     {
         try {
 
-            $sql = "INSERT INTO users(firstname, lastname, email, password) 
-                    VALUES (:firstname, :lastname, :email, :password)"; 
+            $sql = "INSERT INTO Customers(Firstname, Surname,Address, Email, Password) 
+                    VALUES (:firstname, :lastname,:address, :email, :password)"; 
 
             return $this->db->runSQL($sql, $member)->fetch();
 
@@ -65,7 +65,7 @@ class MemberController {
         $member = $this->get_member_by_email($email);
 
         if ($member) {
-            $auth = password_verify($password,  $member['password']);
+            $auth = password_verify($password,  $member['Password']);
             return $auth ? $member : false;
         }
         return false;
