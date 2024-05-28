@@ -10,11 +10,11 @@ if (!empty($id)) {
     if ($product): ?>
     
         <div class="card" style="width: 18rem;">
-            <img src="<?= $product['image'] ?>" class="card-img-top" alt="image of <?= $product['description'] ?>">
+            <img src="<?= $product['Image'] ?>" class="card-img-top" alt="image of <?= $product['Description'] ?>">
             <div class="card-body">
-                <h5 class="card-title"><?= $product['name'] ?></h5>
-                <p class="card-text"><?= $product['description'] ?></p>
-                <p class="card-text"><?= $product['price'] ?></p>
+                <h5 class="card-title"><?= $product['ProductName'] ?></h5>
+                <p class="card-text"><?= $product['Description'] ?></p>
+                <p class="card-text"><?= $product['Price'] ?></p>
             </div>
         </div>
 

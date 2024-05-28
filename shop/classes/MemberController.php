@@ -46,8 +46,8 @@ class MemberController {
     {
         try {
 
-            $sql = "INSERT INTO Customers(Firstname, Surname,Address, Email, Password) 
-                    VALUES (:firstname, :lastname,:address, :email, :password)"; 
+            $sql = "INSERT INTO Customers (Firstname, Surname,Address, Email, Password , IsAdmin) 
+                    VALUES (:firstname, :lastname,:address, :email, :password, :isAdmin)"; 
 
             return $this->db->runSQL($sql, $member)->fetch();
 

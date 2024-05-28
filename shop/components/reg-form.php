@@ -11,6 +11,7 @@
     $email =  InputProcessor::processEmail($_POST['email']);
     $password =  InputProcessor::processPassword($_POST['password'], $_POST['password-v']);
     $address = InputProcessor::processString($_POST['address']);
+    $isAdmin = isset($_POST['isAdmin']) ? 1 : 0;
     
     $valid = $fname['valid'] && $sname['valid'] && $address['valid'] && $email['valid'] && $password['valid'];
 
@@ -23,7 +24,9 @@
                'lastname' => $sname['value'],
                'address' => $address['value'],
                'email' => $email['value'],
-               'password' => password_hash($password['value'], PASSWORD_DEFAULT)];
+               'password' => password_hash($password['value'], PASSWORD_DEFAULT),
+               'isAdmin' => $isAdmin, // Include the new field
+              ];
 
       $member = $controllers->members()->register_member($args);
       if ($member) {
@@ -73,6 +76,13 @@
                 <input required type="password" id="password-v" name="password-v" class="form-control form-control-lg" placeholder="Password again" />
                 <small class="text-danger"><?= htmlspecialchars($password['error'] ?? '') ?></small>
               </div>
+
+              <div class="form-check mb-4">
+  <input class="form-check-input" type="checkbox" value="1" id="isAdmin" name="isAdmin">
+  <label class="form-check-label" for="isAdmin">
+    Is Admin?
+  </label>
+</div>
 
               <button class="btn btn-primary btn-lg w-100 mb-4" type="submit">Register</button>
               <a class="btn btn-secondary btn-lg w-100" type="submit" href="./login.php" >Already got an account?</a>
