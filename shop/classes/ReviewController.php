@@ -9,20 +9,27 @@ class ReviewController {
         $this->db = $db;
     }
 
-    public function create_review(array $product) 
+    public function create_review(array $review) 
     {
         
-        $sql = "INSERT INTO Reviews(customer_id, product_id, Reviews)
-        VALUES (:name, :description, :price, :image);";
-        $this->db->runSQL($sql, $product);
+        $sql = "INSERT INTO Reviews(UserID,  Review)
+        VALUES (:UserID,:Review);";
+        $this->db->runSQL($sql, $review);
         return $this->db->lastInsertId();
     }
 
-    public function get_review_by_product_id(int $id)
+    public function get_review_by_customer_id(int $userid)
     {
-        $sql = "SELECT * FROM Reviews WHERE product_id = :id";
-        $args = ['id' => $id];
+        $sql = "SELECT * FROM Reviews WHERE UserID = :userid";
+        $args = ['userid' => $userid];
         return $this->db->runSQL($sql, $args)->fetch();
+    }
+
+    public function get_all_reviews_with_customer_name()
+    {
+        $sql = "SELECT reviews.*, customers.firstname FROM reviews
+                JOIN customers ON reviews.UserID = customers.UserID";
+        return $this->db->runSQL($sql)->fetchAll();
     }
 
     public function get_all_products_reviews()

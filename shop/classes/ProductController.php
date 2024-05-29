@@ -32,10 +32,11 @@ class ProductController {
     }
 
     public function update_product(array $product)
-    {
-        $sql = "UPDATE Products SET ProductName = :name, Description = :description, Price = :price, Image = :image WHERE product_id = :id";
-        return $this->db->runSQL($sql, $product)->execute();
-    }
+{
+  $sql = "UPDATE Products SET ProductName = :name, Description = :description, Price = :price WHERE `product_id` = :id";
+  // Ensure all keys in $product match placeholders in the SQL string (case-sensitive)
+  return $this->db->runSQL($sql, $product)->execute();
+}
 
     public function delete_product(int $id)
     {

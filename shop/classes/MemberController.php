@@ -11,7 +11,7 @@ class MemberController {
 
     public function get_member_by_id(int $id)
     {
-        $sql = "SELECT * FROM Customers WHERE customer_id = :id";
+        $sql = "SELECT * FROM Customers WHERE UserID = :id";
         $args = ['id' => $id];
         return $this->db->runSQL($sql, $args)->fetch();
     }
@@ -31,13 +31,13 @@ class MemberController {
 
     public function update_member(array $member)
     {
-        $sql = "UPDATE Customers SET Firstname = :firstname, Surname = :lastname, Email = :email WHERE customer_id = :id";
+        $sql = "UPDATE Customers SET Firstname = :firstname, Surname = :lastname, Email = :email, Address = :addres,WHERE UserID = :id";
         return $this->db->runSQL($sql, $member)->execute();
     }
 
     public function delete_member(int $id)
     {
-        $sql = "DELETE FROM Customers WHERE customer_id = :id";
+        $sql = "DELETE FROM Customers WHERE UserID = :id";
         $args = ['id' => $id];
         return $this->db->runSQL($sql, $args)->execute();
     }
@@ -62,13 +62,13 @@ class MemberController {
 
     public function login_member(string $email, string $password)
     {
-        $member = $this->get_member_by_email($email);
-
-        if ($member) {
-            $auth = password_verify($password,  $member['Password']);
-            return $auth ? $member : false;
-        }
-        return false;
+        $user = $this->get_member_by_email($email);
+  
+      if ($user) {
+        $auth = password_verify($password, $user['Password']);
+        return $auth ? $user : false;
+      }
+      return false;
     }
 
 
