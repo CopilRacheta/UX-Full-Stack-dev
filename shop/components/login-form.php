@@ -1,32 +1,45 @@
 <?php
+
+// Unset all session variables (effectively logging out the user)
 session_unset(); 
 
+// Include the file containing functions used in this script (likely for processing user input and interacting with the database)
 require_once './inc/functions.php';
 
-$message = isset($_GET['error']) ? htmlspecialchars($_GET['error']) : '';
+// Initialize variables to store user input and error message
+$message = isset($_GET['error']) ? htmlspecialchars($_GET['error']) : ''; // Get and sanitize potential error message from URL
 $email = null;
 $password = null;
 
+// Check if the form was submitted using POST method
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  $email = InputProcessor::processEmail($_POST['email']);
-  $password = InputProcessor::processPassword($_POST['password']);
+  // Process user input from the login form
+  $email = InputProcessor::processEmail($_POST['email']); // Process email with validation
+  $password = InputProcessor::processPassword($_POST['password']); // Process password with validation
 
+  // Flag to indicate if both inputs are valid
   $valid = $email['valid'] && $password['valid'];
 
+  // Proceed if both email and password are valid
   if ($valid) {
+    // Attempt to login the user using the controllers->members()->login_member function (replace with actual call)
     $user = $controllers->members()->login_member($email['value'], $password['value']);
 
+    // Check if login was successful
     if (!$user) {
-        $message = "User details are incorrect.";
+      // Set an error message if login failed
+      $message = "User details are incorrect."; 
     } else {
-        $_SESSION['user'] = $user;
-        redirect('member');
+      // Store user data in the session and redirect to the member page
+      $_SESSION['user'] = $user;
+      redirect('member');
     }
-} else {
+  } else {
+    // Set an error message indicating invalid input
     $message = "Please fix the above errors. ";
+  }
 }
 
-} 
 ?>
 
 <form method="post" action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>">

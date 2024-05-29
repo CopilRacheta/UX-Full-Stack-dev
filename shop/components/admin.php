@@ -1,92 +1,102 @@
 <?php
+
+// Include the file containing functions used in this script
 require_once './inc/functions.php';
- 
-// Check if the user is logged in
+
+// Check if user is logged in
 if (!isset($_SESSION['user'])) {
-    // Redirect to the login page if the user is not logged in
-    redirect('login', ["error" => "You need to be logged in to view this page"]);
+  // Redirect to login page if user is not logged in
+  redirect('login', ["error" => "You need to be logged in to view this page"]);
 }
- 
-// Ensure role is set in session
+
+// Ensure role is set in session (admin or customer)
 if (!isset($_SESSION['role'])) {
-    $_SESSION['role'] = $_SESSION['user']['IsAdmin'] ? 'admin' : 'customer';
+  $_SESSION['role'] = $_SESSION['user']['IsAdmin'] ? 'admin' : 'customer';
 }
- 
-// Fetch all users
+
+// Fetch all users from the database
 $users = $controllers->members()->get_all_members();
- 
-// Fetch all products
+
+// Fetch all products from the database
 $products = $controllers->products()->get_all_products();
- 
-// Fetch all reviews with user email
-$reviews = $controllers->reviews()->get_all_reviews_with_customer_name();  // Updated method call
- 
-// Check if form is submitted for updating user
+
+// Improved method call to fetch reviews with user email
+$reviews = $controllers->reviews()->get_all_reviews_with_customer_name();
+
+// Check if a user update form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit']) && isset($_POST['user_id'])) {
-    // Gather form data
-    $updated_user = [
-        'firstname' => $_POST['first_name'],
-        'lastname' => $_POST['last_name'],
-        'email' => $_POST['email'],
-        'address' => $_POST['address']
-    ];
-   
-    // Call the update_user function
-    $controllers->members()->update_member($updated_user);
-    // Refresh the page after updating
-    header("Location: {$_SERVER['PHP_SELF']}");
-    exit();
+  // Gather user data from the submitted form
+  $updated_user = [
+    'firstname' => $_POST['first_name'],
+    'lastname' => $_POST['last_name'],
+    'email' => $_POST['email'],
+    'address' => $_POST['address'],
+  ];
+
+  // Update the user in the database
+  $controllers->members()->update_member($updated_user);
+
+  // Redirect back to the current page after update
+  header("Location: {$_SERVER['PHP_SELF']}");
+  exit();
 }
- 
-// Check if form is submitted for deleting user
+
+// Check if a user deletion form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete']) && isset($_POST['user_id'])) {
-    // Gather user ID to delete
-    $user_id = $_POST['user_id'];
-    // Call the delete_user function
-    $controllers->members()->delete_member($user_id);
-    // Refresh the page after deletion
-    header("Location: {$_SERVER['PHP_SELF']}");
-    exit();
+  // Get the user ID to be deleted
+  $user_id = $_POST['user_id'];
+
+  // Delete the user from the database
+  $controllers->members()->delete_member($user_id);
+
+  // Redirect back to the current page after deletion
+  header("Location: {$_SERVER['PHP_SELF']}");
+  exit();
 }
- 
-// Check if form is submitted for updating product
+
+// Check if a product update form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit']) && isset($_POST['product_id'])) {
-    // Gather form data
-    $product = [
-        'ProductID' => $_POST['product_id'],
-        'ProductName' => $_POST['name'],
-        'Description' => $_POST['description'],
-        'Price' => $_POST['price']
-    ];
- 
-    // Call the update_product function
-    $controllers->products()->update_product($product);
-    // Refresh the page after updating
-    header("Location: {$_SERVER['PHP_SELF']}");
-    exit();
+  // Gather product data from the submitted form
+  $product = [
+    'ProductID' => $_POST['product_id'],
+    'ProductName' => $_POST['name'],
+    'Description' => $_POST['description'],
+    'Price' => $_POST['price'],
+  ];
+
+  // Update the product in the database
+  $controllers->products()->update_product($product);
+
+  // Redirect back to the current page after update
+  header("Location: {$_SERVER['PHP_SELF']}");
+  exit();
 }
- 
-// Check if form is submitted for deleting product
+
+// Check if a product deletion form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_product']) && isset($_POST['product_id'])) {
-    // Gather product ID to delete
-    $product_id = $_POST['product_id'];
-    // Call the delete_product function
-    $controllers->products()->delete_product($product_id);
-    // Refresh the page after deletion
-    header("Location: {$_SERVER['PHP_SELF']}");
-    exit();
+  // Get the product ID to be deleted
+  $product_id = $_POST['product_id'];
+
+  // Delete the product from the database
+  $controllers->products()->delete_product($product_id);
+
+  // Redirect back to the current page after deletion
+  header("Location: {$_SERVER['PHP_SELF']}");
+  exit();
 }
- 
-// Check if form is submitted for deleting review
+
+// Check if a review deletion form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_review']) && isset($_POST['review_id']) && isset($_POST['user_id'])) {
-    // Gather review ID and user ID to delete
-    $review_id = $_POST['review_id'];
-    $user_id = $_POST['user_id'];
-    // Call the delete_review function
-    $controllers->reviews()->delete_review($review_id, $user_id);
-    // Refresh the page after deletion
-    header("Location: {$_SERVER['PHP_SELF']}");
-    exit();
+  // Get the review ID and user ID to be deleted
+  $review_id = $_POST['review_id'];
+  $user_id = $_POST['user_id'];
+
+  // Delete the review from the database
+  $controllers->reviews()->delete_review($review_id, $user_id);
+
+  // Redirect back to the current page after deletion
+  header("Location: {$_SERVER['PHP_SELF']}");
+  exit();
 }
 ?>
  
@@ -102,7 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_review']) && is
     <div class="container mt-5">
         <div class="row justify-content-center">
             <?php foreach ($users as $user): ?>
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <div class="card mb-4">
                         <div class="card-body">
                             <h2>User Account</h2>
@@ -138,7 +148,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_review']) && is
         <div class="row justify-content-center">
             <?php foreach ($products as $product): ?>
                 <div class="col-md-6">
-                    <div class="card mb-4">
+                    <div class="card mb-2">
                         <div class="card-body">
                             <h2>Product Details</h2>
                             <img src="<?= $product['Image'] ?>" class="card-img-top" alt="image of <?= $product['Description'] ?>">

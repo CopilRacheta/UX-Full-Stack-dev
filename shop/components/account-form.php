@@ -1,34 +1,42 @@
 <?php
+// Include the file containing functions used in this script (likely database interaction or user management functions)
 require_once './inc/functions.php';
 
+// Check if a user session is set and if the UserID in the session is numeric (valid)
 if (isset($_SESSION['user']) && is_numeric($_SESSION['user']['UserID'])) {
-    $user = $controllers->members()->get_member_by_id($_SESSION['user']['UserID']);
+  // If valid, fetch the user data using their UserID 
+  $user = $controllers->members()->get_member_by_id($_SESSION['user']['UserID']);
 } else {
-    // Handle case where user ID is not available (e.g., redirect to login)
+  // Handle the case where user ID is not available (e.g., redirect to login page)
+  // You can implement logic here to redirect the user to a login page or display an error message
 }
 
-// Ensure role is set in session
+// Ensure role (admin/customer) is set in session
 if (!isset($_SESSION['role'])) {
-    $_SESSION['role'] = $_SESSION['user']['IsAdmin'] ? 'admin' : 'customer';
+  // Assign the role based on the IsAdmin value in the user session
+  $_SESSION['role'] = $_SESSION['user']['IsAdmin'] ? 'admin' : 'customer';
 }
+
+// Fetch reviews for the current user using their UserID from the session
 $reviews = $controllers->reviews()->get_review_by_customer_id($_SESSION['user']['UserID']);
 
-// Check if form is submitted for updating user
+// Check if the form is submitted for updating user information
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
-    // Gather form data
-    $updated_user = [
-        'UserID' => $_POST['user_id'],
-        'FirstName' => $_POST['first_name'],
-        'LastName' => $_POST['last_name'],
-        'Email' => $_POST['email'],
-        'Address' => $_POST['address']
-    ];
- 
-    // Call the update_user function
-    $controllers->members()->update_member($updated_user);
-    // Refresh the page after updating
-    header("Location: {$_SERVER['PHP_SELF']}");
-    exit();
+  // Gather form data into an associative array
+  $updated_user = [
+    'UserID' => $_POST['user_id'],
+    'FirstName' => $_POST['first_name'],
+    'LastName' => $_POST['last_name'],
+    'Email' => $_POST['email'],
+    'Address' => $_POST['address']
+  ];
+
+  // Call the update_user function to update user data in the database (replace with actual function call)
+  $controllers->members()->update_member($updated_user);
+
+  // Redirect the user back to the current page after successful update
+  header("Location: {$_SERVER['PHP_SELF']}");
+  exit();
 }
 ?>
          

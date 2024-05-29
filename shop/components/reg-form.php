@@ -1,44 +1,55 @@
 <?php
-  
-  require_once './inc/functions.php';
 
-  $message = isset($_GET['error']) ? htmlspecialchars($_GET['error']) : '';
+// Include the file containing functions used in this script (likely for processing user input and interacting with the database)
+require_once './inc/functions.php';
 
-  if ($_SERVER['REQUEST_METHOD'] == 'POST')
-  {
-    $fname = InputProcessor::processString($_POST['fname']);
-    $sname =  InputProcessor::processString($_POST['sname']);
-    $email =  InputProcessor::processEmail($_POST['email']);
-    $password =  InputProcessor::processPassword($_POST['password'], $_POST['password-v']);
-    $address = InputProcessor::processString($_POST['address']);
-    $isAdmin = isset($_POST['isAdmin']) ? 1 : 0;
-    
-    $valid = $fname['valid'] && $sname['valid'] && $address['valid'] && $email['valid'] && $password['valid'];
+// Initialize a variable to store any error message retrieved from the URL with proper sanitization
+$message = isset($_GET['error']) ? htmlspecialchars($_GET['error']) : '';
 
-    $message = !$valid ? "Please fix the above errors:" : '';
+// Check if the form was submitted using POST method
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  // Process user input from the registration form
+  $fname = InputProcessor::processString($_POST['fname']); // Process first name with validation
+  $sname = InputProcessor::processString($_POST['sname']); // Process last name with validation
+  $email = InputProcessor::processEmail($_POST['email']); // Process email with validation
+  $password = InputProcessor::processPassword($_POST['password'], $_POST['password-v']); // Process password with validation (including confirmation)
+  $address = InputProcessor::processString($_POST['address']); // Process address with validation
+  $isAdmin = isset($_POST['isAdmin']) ? 1 : 0; // Check if "isAdmin" checkbox is checked (set to 1) or not (set to 0)
 
-    if ($valid)
-    {
+  // Flag to indicate if all inputs are valid
+  $valid = $fname['valid'] && $sname['valid'] && $address['valid'] && $email['valid'] && $password['valid'];
 
-      $args = ['firstname' => $fname['value'],
-               'lastname' => $sname['value'],
-               'address' => $address['value'],
-               'email' => $email['value'],
-               'password' => password_hash($password['value'], PASSWORD_DEFAULT),
-               'isAdmin' => $isAdmin, // Include the new field
-              ];
+  // Set an error message if any input is invalid
+  $message = !$valid ? "Please fix the above errors:" : '';
 
-      $member = $controllers->members()->register_member($args);
-      if ($member) {
-        redirect("login", ["error" => "Please login with your new account"]);
-      } else {
-        $message = "Email already registered.";
-      }
-      
+  // Proceed if all inputs are valid
+  if ($valid) {
+    // Prepare arguments for creating the new member
+    $args = [
+      'firstname' => $fname['value'],
+      'lastname' => $sname['value'],
+      'address' => $address['value'],
+      'email' => $email['value'],
+      'password' => password_hash($password['value'], PASSWORD_DEFAULT), // Hash the password securely
+      'isAdmin' => $isAdmin, // Include the new field for admin status
+    ];
+
+    // Register the new member using the controllers->members()->register_member function (replace with actual call)
+    $member = $controllers->members()->register_member($args);
+
+    // Check if registration was successful
+    if ($member) {
+      // Redirect the user to the login page with a message suggesting to login with the new account
+      redirect("login", ["error" => "Please login with your new account"]);
+    } else {
+      // Set an error message if email is already registered
+      $message = "Email already registered.";
     }
-
   }
+}
+
 ?>
+
 <form method="post" action=" <?= htmlspecialchars($_SERVER['PHP_SELF']) ?>">
   <section class="vh-100">
     <div class="container py-5 h-75">

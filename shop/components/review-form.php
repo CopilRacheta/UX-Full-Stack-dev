@@ -1,52 +1,60 @@
 <?php
+
+// Include the file containing functions used in this script (likely for interacting with the database)
 require_once './inc/functions.php';
 
+// Get current user data from the session
 $user = $controllers->members()->get_member_by_id($_SESSION['user']['UserID']);
- 
-// Check if form is submitted for leaving a review
+
+// Check if the form is submitted for leaving a review
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_review'])) {
-    // Gather form data
-    $review_data = [
-        'UserID' => $_POST['user_id'],
-        'Review' => $_POST['review']
-    ];
-        // Call the create_review function
-        $controllers->reviews()->create_review($review_data);
-        // Set the popup message
-        $popup_message = "Review created successfully!";
-  }
+  // Gather review data from the form
+  $review_data = [
+    'UserID' => $_POST['user_id'], // Assuming this is hidden and pre-filled with the current user's ID
+    'Review' => $_POST['review'],
+  ];
 
-  // Fetch all reviews with user email
-$reviews = $controllers->reviews()->get_all_reviews_with_customer_name();  // Updated method call
+  // Call the function to create a new review (replace with actual function call)
+  $controllers->reviews()->create_review($review_data);
 
+  // Set a success message for the user
+  $popup_message = "Review created successfully!";
+}
 
-// Check if form is submitted for updating a review
+// Fetch all reviews with the associated user's name (update the method call accordingly)
+$reviews = $controllers->reviews()->get_all_reviews_with_customer_name(); // Updated method call
+
+// Check if the form is submitted for updating a review
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_review'])) {
-    // Gather form data
-    $updated_review = [
-        'id' => $_POST['review_id'],
-        'Review' => $_POST['review'],
-        'user_id' => $_SESSION['user']['UserID']
-    ];
- 
-    // Call the update_review function
-    $controllers->reviews()->update_review($updated_review);
-    // Refresh the page after updating the review
-    header("Location: {$_SERVER['PHP_SELF']}");
-    exit();
+  // Gather updated review data from the form
+  $updated_review = [
+    'id' => $_POST['review_id'],
+    'Review' => $_POST['review'],
+    'user_id' => $_SESSION['user']['UserID'], // Assuming this is hidden and pre-filled with the current user's ID
+  ];
+
+  // Call the function to update the review (replace with actual function call)
+  $controllers->reviews()->update_review($updated_review);
+
+  // Redirect the user back to the same page after successful update
+  header("Location: {$_SERVER['PHP_SELF']}");
+  exit();
 }
-// Check if form is submitted for deleting a review
+
+// Check if the form is submitted for deleting a review
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_review'])) {
-    // Gather form data
-    $review_id = $_POST['review_id'];
-    $user_id = $_SESSION['user']['UserID'];
- 
-    // Call the delete_review function
-    $controllers->reviews()->delete_review($review_id, $user_id);
-    // Refresh the page after deleting the review
-    header("Location: {$_SERVER['PHP_SELF']}");
-    exit();
+  // Gather review ID and user ID from the form
+  $review_id = $_POST['review_id'];
+  $user_id = $_SESSION['user']['UserID'];
+
+  // Call the function to delete the review (replace with actual function call)
+  $controllers->reviews()->delete_review($review_id, $user_id);
+
+  // Redirect the user back to the same page after successful deletion
+  header("Location: {$_SERVER['PHP_SELF']}");
+  exit();
 }
+
 ?>
 
 <!DOCTYPE html>

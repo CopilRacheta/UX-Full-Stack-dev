@@ -23,18 +23,44 @@ if (isset($_GET['logout'])) {
             background-color: #B6FFDD; /* Light green color */
             
         }
+
+        .bg-green {
+            background-color: #00FF48; /* Light green color */
+            
+        }
+        body * {
+  color: black;
+}
+h1, h2, h3, h4, h5, h6 {
+  color: black;
+}
+
+a {
+  color: black;
+}
+.nav-link {
+  color: black; /* Change to your desired color */
+  padding-left: 10px; /* Adjust the pixel value for desired spacing */
+  padding-right: 10px; /* Consider adding padding-right for consistency */
+}
+#myNav .nav-link {  /* Targeting the nav-link class within the element with ID "myNav" */
+  margin-right: 0 !important;  /* Override any right margin for consistency */
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
     </style>
   </head>
   <body class="bg-light-green">
  
-  <div class="nav-container"> <nav class="navbar navbar-expand-lg bg-success">
+   <nav class="navbar navbar-expand-lg bg-green">
       <div class="container-fluid">
         <a class="navbar-brand" href="./index.php">Broadleigh Gardens</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
-          <ul class="navbar-nav mb-1 mb-lg-0">
+          <ul class="navbar-nav mb-2 mb-lg-0">
           <li class="nav-item">
               <a class="nav-link" href="./product.php">Shop</a>
             </li>
@@ -63,19 +89,19 @@ if (isset($_GET['logout'])) {
             <?php endif; ?>
             <?php if ($isLoggedIn): ?>
 
-              <li class="nav-item">
-                <a class="nav-link" href="./member.php"><i class="bi bi-person-circle" style="font-size: 2rem;"></i></a>
-              </li>
+
               <li class="nav-item">
                 <a class="nav-link" href="?logout=true">Logout</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link " href="./member.php"><i class="bi bi-person-circle" style="font-size: 2rem;"></i></a>
               </li>
             <?php endif; ?>
           </ul>
         </div>
       </div>
     </nav>
-  </div>
- 
+
   </body>
 </html>
  

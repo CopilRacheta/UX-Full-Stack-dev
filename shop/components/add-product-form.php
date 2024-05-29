@@ -1,46 +1,54 @@
-<?php 
+<?php
 
+// Include the file containing functions used in this script (likely for processing user input and interacting with the database)
 require_once './inc/functions.php';
 
+// Initialize a variable to store any error messages
 $message = '';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST')
-{
+// Check if the form was submitted using POST method
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  // Process user input from the form
+  $name = InputProcessor::processString($_POST['name'] ?? '');
+  $description = InputProcessor::processString($_POST['description'] ?? '');
+  $price = InputProcessor::processString($_POST['price'] ?? '');
+  $image = InputProcessor::processFile($_FILES['image'] ?? []);
 
-    $name = InputProcessor::processString($_POST['name'] ?? '');
-    $description = InputProcessor::processString($_POST['description'] ?? '');
-    $price = InputProcessor::processString($_POST['price'] ?? '');
-    $image = InputProcessor::processFile($_FILES['image'] ?? []);
+  // Flag to indicate if all inputs are valid
+  $valid = $name['valid'] && $description['valid'] && $price['valid'] && $image['valid'];
 
-    $valid =  $name['valid'] && $description['valid'] && $price['valid'] && $image['valid'];
+  // Proceed if all inputs are valid
+  if ($valid) {
+    // Upload the image using the ImageProcessor class (replace with actual implementation)
+    $image['value'] = ImageProcessor::upload($_FILES['image']);
 
-    if($valid) {
+    // Prepare arguments for creating the new product
+    $args = [
+      'name' => $name['value'],
+      'description' => $description['value'],
+      'price' => $price['value'],
+      'image' => $image['value'],
+    ];
 
-      $image['value'] = ImageProcessor::upload($_FILES['image']);
-      
-      $args = ['name' => $name['value'] , 
-              'description' => $description['value'] , 
-              'price' => $price['value'] ,
-              'image' =>  $image['value'] 
-              ];
+    // Create a new product using the controllers->products()->create_product function (replace with actual call)
+    $id = $controllers->products()->create_product($args);
 
-      $id = $controllers->products()->create_product($args);
-
-      if(!empty($id) && $id > 0) {
-        redirect('product', ['id' => $id]);
-      }
-      else {
-        $message = "Error adding product."; //Change
-      }
+    // Check if the product was created successfully
+    if (!empty($id) && $id > 0) {
+      // Redirect the user to the product page with the new product ID
+      redirect('product', ['id' => $id]);
+    } else {
+      // Set an error message if product creation failed
+      $message = "Error adding product."; // You can improve this message with specific details from the error
     }
-    else {
-       $message =  "Please fix the following errors: ";
-   }
-
-} 
-
+  } else {
+    // Set an error message indicating invalid input
+    $message = "Please fix the following errors: ";
+  }
+}
 
 ?>
+
 
   <form method="post" action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" enctype="multipart/form-data">
     <section class="vh-100">
@@ -72,13 +80,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                 </div>
     
                 <button class="btn btn-primary btn-lg w-100 mb-4" type="submit">Add Product</button>
-               
-                <?= isset($_GET['errmsg']) ? $message = $_GET['errmsg'] : '' ?>
-
-                <div class="alert alert-danger mt-4" role="alert">
-                  <?= $message ?? '' ?>
-                </div>
-
               </div>
             </div>
           </div>
