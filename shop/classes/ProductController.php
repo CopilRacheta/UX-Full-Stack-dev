@@ -39,16 +39,16 @@ class ProductController {
     // Simple SQL statement to select all products
     $sql = "SELECT * FROM Products";
 
-    // Execute the SQL statement and return all fetched products (multiple rows)
+    // Execute the SQL statement and return all fetched products 
     return $this->db->runSQL($sql)->fetchAll();
   }
 
   // Function to update a product in the database
   public function update_product(array $product) {
     // SQL statement for updating a product with named parameters
-    $sql = "UPDATE Products SET ProductName = :name, Description = :description, Price = :price WHERE `product_id` = :id";
+    $sql = "UPDATE Products SET ProductName = :ProductName, Description = :Description, Price = :Price WHERE `product_id` = :id";
 
-    // **Important:** Ensure all keys in $product match placeholders in the SQL string (case-sensitive)
+    // **Important:** Ensure all keys in $product match placeholders in the SQL string 
     // This comment highlights the importance of matching parameter names in the product array with the placeholders in the SQL statement.
 
     // Execute the SQL statement and check if it was successful

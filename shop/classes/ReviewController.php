@@ -30,7 +30,7 @@ class ReviewController {
     // Prepare arguments for the SQL statement
     $args = ['userid' => $userid];
 
-    // Execute the SQL statement and return the fetched review (single row)
+    // Execute the SQL statement and return the fetched review 
     return $this->db->runSQL($sql, $args)->fetch();
   }
 
@@ -40,16 +40,16 @@ class ReviewController {
     $sql = "SELECT reviews.*, customers.firstname FROM reviews
              JOIN customers ON reviews.UserID = customers.UserID";
 
-    // Execute the SQL statement and return all fetched reviews (multiple rows)
+    // Execute the SQL statement and return all fetched reviews 
     return $this->db->runSQL($sql)->fetchAll();
   }
 
-  // Function to get all product reviews (replace with specific logic if needed)
+  // Function to get all product reviews 
   public function get_all_products_reviews() {
-    // Simple SQL statement to select all reviews (replace with specific logic if needed)
+    // Simple SQL statement to select all reviews 
     $sql = "SELECT * FROM Reviews";
 
-    // Execute the SQL statement and return all fetched reviews (multiple rows)
+    // Execute the SQL statement and return all fetched reviews
     return $this->db->runSQL($sql)->fetchAll();
   }
 
@@ -64,7 +64,13 @@ class ReviewController {
     // Execute the SQL statement and check if it was successful
     return $this->db->runSQL($sql, $args)->execute();
   }
-
+  public function update_review(array $review) {
+    // SQL statement for updating a member with named parameters
+    $sql = "UPDATE Reviews SET UserID = :UserID, Review = :Review WHERE reviews_id = :id";
+  
+    // Execute the SQL statement and check if it was successful
+    return $this->db->runSQL($sql, $review)->execute();
+  }
 }
 
 ?>

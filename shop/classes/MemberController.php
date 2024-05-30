@@ -19,7 +19,7 @@ class MemberController {
     // Prepare arguments for the SQL statement
     $args = ['id' => $id];
 
-    // Execute the SQL statement and return the fetched member (single row)
+    // Execute the SQL statement and return the fetched member 
     return $this->db->runSQL($sql, $args)->fetch();
   }
 
@@ -31,7 +31,7 @@ class MemberController {
     // Prepare arguments for the SQL statement
     $args = ['email' => $email];
 
-    // Execute the SQL statement and return the fetched member (single row)
+    // Execute the SQL statement and return the fetched member 
     return $this->db->runSQL($sql, $args)->fetch();
   }
 
@@ -40,15 +40,15 @@ class MemberController {
     // Simple SQL statement to select all members
     $sql = "SELECT * FROM Customers";
 
-    // Execute the SQL statement and return all fetched members (multiple rows)
+    // Execute the SQL statement and return all fetched members 
     return $this->db->runSQL($sql)->fetchAll();
   }
 
-  // Function to update a member's information
-  public function update_member(array $member) {
-    // SQL statement for updating a member with named parameters (fix typo in WHERE clause)
-    $sql = "UPDATE Customers SET Firstname = :firstname, Surname = :lastname, Email = :email, Address = :address WHERE UserID = :id";
-
+// Function to update a member's information
+public function update_member(array $member) {
+    // SQL statement for updating a member with named parameters
+    $sql = "UPDATE Customers SET Firstname = :Firstname, Surname = :Surname, Address = :Address, Email = :Email WHERE UserID = :user_id";
+  
     // Execute the SQL statement and check if it was successful
     return $this->db->runSQL($sql, $member)->execute();
   }
@@ -76,8 +76,6 @@ class MemberController {
       // Execute the SQL statement with the member data
       $this->db->runSQL($sql, $member);
 
-      // Assuming you don't need to return the inserted data, this can be simplified:
-      // return $this->db->runSQL($sql, $member)->execute();
 
     } catch (PDOException $e) {
       // Handle specific exception code for duplicate email (could be 23000 or 1062 depending on the database)

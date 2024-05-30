@@ -1,14 +1,13 @@
 <?php
-// Include the file containing functions used in this script (likely database interaction or user management functions)
+// Include the file containing functions used in this script 
 require_once './inc/functions.php';
 
-// Check if a user session is set and if the UserID in the session is numeric (valid)
+// Check if a user session is set and if the UserID in the session is numeric 
 if (isset($_SESSION['user']) && is_numeric($_SESSION['user']['UserID'])) {
   // If valid, fetch the user data using their UserID 
   $user = $controllers->members()->get_member_by_id($_SESSION['user']['UserID']);
 } else {
-  // Handle the case where user ID is not available (e.g., redirect to login page)
-  // You can implement logic here to redirect the user to a login page or display an error message
+    redirect('login', ["error" => "You need to be logged in to view this page"]);
 }
 
 // Ensure role (admin/customer) is set in session
@@ -21,80 +20,93 @@ if (!isset($_SESSION['role'])) {
 $reviews = $controllers->reviews()->get_review_by_customer_id($_SESSION['user']['UserID']);
 
 // Check if the form is submitted for updating user information
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
-  // Gather form data into an associative array
-  $updated_user = [
-    'UserID' => $_POST['user_id'],
-    'FirstName' => $_POST['first_name'],
-    'LastName' => $_POST['last_name'],
-    'Email' => $_POST['email'],
-    'Address' => $_POST['address']
-  ];
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit']) && isset($_POST['user_id'])) {
+    // Gather form data
+    $updated_user = [
+        'UserID' => $_POST['user_id'],
+        'FirstName' => $_POST['first_name'],
+        'LastName' => $_POST['last_name'],
+        'Email' => $_POST['email'],
+        'Address' => $_POST['address']
+    ];
 
-  // Call the update_user function to update user data in the database (replace with actual function call)
+
+  // Call the update_user function to update user data in the database 
   $controllers->members()->update_member($updated_user);
 
   // Redirect the user back to the current page after successful update
   header("Location: {$_SERVER['PHP_SELF']}");
   exit();
 }
+
+// Check if a user deletion form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete']) && isset($_POST['user_id'])) {
+    // Get the user ID to be deleted
+    $user_id = $_POST['user_id'];
+  
+    // Delete the user from the database
+    $controllers->members()->delete_member($user_id);
+  
+    // Redirect back to the current page after deletion
+    header("Location: {$_SERVER['PHP_SELF']}");
+    exit();
+  }
 ?>
          
-<!DOCTYPE html>
+         <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
+    <title>Admin Page</title>
 </head>
 <body>
-    <!-- Display welcome message based on user role -->
-    <?php if ($_SESSION['role'] === 'admin'): ?>
-        <h2>Welcome Admin</h2>
-    <?php else: ?>
-        <h2>Welcome to your account</h2>
-    <?php endif; ?>
- 
+    <h1>Customer Accounts</h1>
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title"><?= $user['Firstname'] ?> <?= $user['Surname'] ?></h5>
-                        <p class="card-text"><strong>Email:</strong> <?= $user['Email'] ?></p>
-                        <p class="card-text"><strong>Address:</strong> <?= $user['Address'] ?></p>
-                        <!-- Button to toggle update form -->
-                        <button class="btn btn-primary" onclick="toggleForm()">Update</button>
-                        <!-- Update form -->
-                        <form method="post" id="updateForm" style="display: none;">
-                            <input type="hidden" name="user_id" value="<?= $user['UserID'] ?>">
-                            <label for="first_name">First Name:</label><br>
-                            <input type="text" id="first_name" name="first_name" value="<?= $user['Firstname'] ?>"><br>
-                            <label for="last_name">Last Name:</label><br>
-                            <input type="text" id="last_name" name="last_name" value="<?= $user['Surname'] ?>"><br>
-                            <label for="user_name">Username:</label><br>
-                            <input type="email" id="email" name="email" value="<?= $user['Email'] ?>"><br>
-                            <label for="phone">Phone:</label><br>
-                            <input type="text" id="address" name="address" value="<?= $user['Address'] ?>"><br><br>
-                            <input type="submit" name="submit" value="Update">
-                        </form>
+                <div class="col-md-8">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h2>User Account</h2>
+                            <h5 class="card-title"><?= $user['Firstname'] ?> <?= $user['Surname'] ?></h5>
+                            <p class="card-text"><strong>Email:</strong> <?= $user['Email'] ?></p>
+                            <p class="card-text"><strong>Address:</strong> <?= $user['Address'] ?></p>
+                            <button class="btn btn-primary" onclick="toggleForm(<?= $user['UserID'] ?>)">Update</button>
+                            <form method="post" id="updateForm_<?= $user['UserID'] ?>" style="display: none;">
+                                <input type="hidden" name="user_id" value="<?= $user['UserID'] ?>">
+                                <label for="first_name">First Name:</label><br>
+                                <input type="text" id="first_name" name="first_name" value="<?= $user['Firstname'] ?>"><br>
+                                <label for="last_name">Last Name:</label><br>
+                                <input type="text" id="last_name" name="last_name" value="<?= $user['Surname'] ?>"><br>
+                                <label for="email">Email:</label><br>
+                                <input type="email" id="email" name="email" value="<?= $user['Email'] ?>"><br>
+                                <label for="address">Address:</label><br>
+                                <input type="text" id="address" name="address" value="<?= $user['Address'] ?>"><br><br>
+                                <input type="submit" name="submit" value="Update">
+                            </form>
+                            <form method="post" onsubmit="return confirm('Are you sure you want to delete this account?');">
+                                <input type="hidden" name="user_id" value="<?= $user['UserID'] ?>">
+                                <button type="submit" class="btn btn-danger" name="delete">Delete Account</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            
-            </div>
         </div>
     </div>
+</div>
  
     <script>
-        // Function to toggle update form visibility
-        function toggleForm() {
-            var form = document.getElementById('updateForm');
-            if (form.style.display === "none") {
-                form.style.display = "block";
-            } else {
-                form.style.display = "none";
-            }
-        }
+    // Function to toggle update form visibility for users
+    function toggleForm(userId) {
+        var form = document.getElementById('updateForm_' + userId);
+        form.style.display = form.style.display === "none" ? "block" : "none";
+    }
+ 
+    // Function to toggle update form visibility for products
+    function toggleProductForm(productId) {
+        var form = document.getElementById('productForm_' + productId);
+        form.style.display = form.style.display === "none" ? "block" : "none";
+    }
     </script>
 </body>
 </html>

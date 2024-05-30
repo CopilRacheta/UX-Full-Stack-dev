@@ -1,9 +1,9 @@
 <?php
 
-// Include the file containing functions used in this script (likely for interacting with the database)
+// Include the file containing functions used in this script
 require_once './inc/functions.php';
 
-// Get all products from the database using the controllers->products()->get_all_products function (replace with actual call)
+// Get all products from the database using the controllers->products()->get_all_products function 
 $products = $controllers->products()->get_all_products();
 
 // Loop through each product in the fetched results

@@ -1,6 +1,6 @@
 <?php
 
-// Include the file containing functions used in this script (likely for processing user input and interacting with the database)
+// Include the file containing functions used in this script 
 require_once './inc/functions.php';
 
 // Initialize a variable to store any error message retrieved from the URL with proper sanitization
@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $fname = InputProcessor::processString($_POST['fname']); // Process first name with validation
   $sname = InputProcessor::processString($_POST['sname']); // Process last name with validation
   $email = InputProcessor::processEmail($_POST['email']); // Process email with validation
-  $password = InputProcessor::processPassword($_POST['password'], $_POST['password-v']); // Process password with validation (including confirmation)
+  $password = InputProcessor::processPassword($_POST['password'], $_POST['password-v']); // Process password with validation 
   $address = InputProcessor::processString($_POST['address']); // Process address with validation
   $isAdmin = isset($_POST['isAdmin']) ? 1 : 0; // Check if "isAdmin" checkbox is checked (set to 1) or not (set to 0)
 
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       'isAdmin' => $isAdmin, // Include the new field for admin status
     ];
 
-    // Register the new member using the controllers->members()->register_member function (replace with actual call)
+    // Register the new member using the controllers->members()->register_member function 
     $member = $controllers->members()->register_member($args);
 
     // Check if registration was successful

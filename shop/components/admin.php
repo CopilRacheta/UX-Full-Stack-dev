@@ -13,7 +13,6 @@ if (!isset($_SESSION['user'])) {
 if (!isset($_SESSION['role'])) {
   $_SESSION['role'] = $_SESSION['user']['IsAdmin'] ? 'admin' : 'customer';
 }
-
 // Fetch all users from the database
 $users = $controllers->members()->get_all_members();
 
@@ -27,10 +26,11 @@ $reviews = $controllers->reviews()->get_all_reviews_with_customer_name();
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit']) && isset($_POST['user_id'])) {
   // Gather user data from the submitted form
   $updated_user = [
-    'firstname' => $_POST['first_name'],
-    'lastname' => $_POST['last_name'],
-    'email' => $_POST['email'],
-    'address' => $_POST['address'],
+    'UserID' => $_POST['user_id'],
+    'Firstname' => $_POST['first_name'],
+    'Surname' => $_POST['last_name'],
+    'Email' => $_POST['email'],
+    'Address' => $_POST['address'],
   ];
 
   // Update the user in the database
@@ -58,7 +58,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete']) && isset($_P
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit']) && isset($_POST['product_id'])) {
   // Gather product data from the submitted form
   $product = [
-    'ProductID' => $_POST['product_id'],
     'ProductName' => $_POST['name'],
     'Description' => $_POST['description'],
     'Price' => $_POST['price'],

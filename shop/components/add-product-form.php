@@ -1,6 +1,6 @@
 <?php
 
-// Include the file containing functions used in this script (likely for processing user input and interacting with the database)
+// Include the file containing functions used in this script 
 require_once './inc/functions.php';
 
 // Initialize a variable to store any error messages
@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   // Proceed if all inputs are valid
   if ($valid) {
-    // Upload the image using the ImageProcessor class (replace with actual implementation)
+    // Upload the image using the ImageProcessor class 
     $image['value'] = ImageProcessor::upload($_FILES['image']);
 
     // Prepare arguments for creating the new product
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       'image' => $image['value'],
     ];
 
-    // Create a new product using the controllers->products()->create_product function (replace with actual call)
+    // Create a new product using the controllers->products()->create_product function 
     $id = $controllers->products()->create_product($args);
 
     // Check if the product was created successfully

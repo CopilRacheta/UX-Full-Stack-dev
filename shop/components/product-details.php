@@ -1,9 +1,6 @@
-Sure, here's the code with comments added:
-
-PHP
 <?php
 
-// Include the file containing functions used in this script (likely for interacting with the database)
+// Include the file containing functions used in this script 
 require_once './inc/functions.php';
 
 // Get the product ID from the URL parameter (if it exists)
@@ -11,7 +8,7 @@ $id = $_GET['id'] ?? '';
 
 // Check if a product ID is provided
 if (!empty($id)) {
-  // Fetch product details from the database using the controllers->products()->get_product_by_id function (replace with actual call)
+  // Fetch product details from the database using the controllers->products()->get_product_by_id function 
   $product = $controllers->products()->get_product_by_id($id);
 
   // Check if the product was found
@@ -29,11 +26,11 @@ if (!empty($id)) {
   <?php 
   else:
     // Redirect to a "not found" page if the product is not found
-    redirect("not-found"); // Replace with actual redirect logic (e.g., 404 page)
+    redirect("not-found"); 
   endif;
 } else {
   // Redirect to a "not found" page if no product ID is provided
-  redirect("not-found"); // Replace with actual redirect logic (e.g., 404 page)
+  redirect("not-found"); 
 }
 
 ?>

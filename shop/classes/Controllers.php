@@ -5,9 +5,9 @@ class Controllers {
   // Class representing a central controller for managing other controllers
 
   protected $db = null;  // Database connection object
-  protected $members = null;  // Instance of MemberController (lazy loading)
-  protected $products = null;  // Instance of ProductController (lazy loading)
-  protected $reviews = null;  // Instance of ReviewController (lazy loading)
+  protected $members = null;  // Instance of MemberController 
+  protected $products = null;  // Instance of ProductController 
+  protected $reviews = null;  // Instance of ReviewController 
 
   public function __construct() {
     // Constructor to establish a database connection and initialize child controllers

@@ -32,7 +32,7 @@ class DatabaseController extends PDO {
       // Execute the prepared statement with the provided arguments
       $statement->execute($args);
 
-      // Return the prepared statement object for further actions (like fetching results)
+      // Return the prepared statement object for further actions 
       return $statement;
     }
   }

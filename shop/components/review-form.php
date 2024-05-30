@@ -1,6 +1,6 @@
 <?php
 
-// Include the file containing functions used in this script (likely for interacting with the database)
+// Include the file containing functions used in this script 
 require_once './inc/functions.php';
 
 // Get current user data from the session
@@ -14,14 +14,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_review'])) {
     'Review' => $_POST['review'],
   ];
 
-  // Call the function to create a new review (replace with actual function call)
+  // Call the function to create a new review 
   $controllers->reviews()->create_review($review_data);
 
   // Set a success message for the user
   $popup_message = "Review created successfully!";
 }
 
-// Fetch all reviews with the associated user's name (update the method call accordingly)
+// Fetch all reviews with the associated user's name 
 $reviews = $controllers->reviews()->get_all_reviews_with_customer_name(); // Updated method call
 
 // Check if the form is submitted for updating a review
@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_review'])) {
     'user_id' => $_SESSION['user']['UserID'], // Assuming this is hidden and pre-filled with the current user's ID
   ];
 
-  // Call the function to update the review (replace with actual function call)
+  // Call the function to update the review 
   $controllers->reviews()->update_review($updated_review);
 
   // Redirect the user back to the same page after successful update
@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_review'])) {
   $review_id = $_POST['review_id'];
   $user_id = $_SESSION['user']['UserID'];
 
-  // Call the function to delete the review (replace with actual function call)
+  // Call the function to delete the review 
   $controllers->reviews()->delete_review($review_id, $user_id);
 
   // Redirect the user back to the same page after successful deletion

@@ -1,9 +1,9 @@
 <?php
 
-// Unset all session variables (effectively logging out the user)
+// Unset all session variables
 session_unset(); 
 
-// Include the file containing functions used in this script (likely for processing user input and interacting with the database)
+// Include the file containing functions used in this script 
 require_once './inc/functions.php';
 
 // Initialize variables to store user input and error message
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   // Proceed if both email and password are valid
   if ($valid) {
-    // Attempt to login the user using the controllers->members()->login_member function (replace with actual call)
+    // Attempt to login the user using the controllers->members()->login_member function 
     $user = $controllers->members()->login_member($email['value'], $password['value']);
 
     // Check if login was successful
